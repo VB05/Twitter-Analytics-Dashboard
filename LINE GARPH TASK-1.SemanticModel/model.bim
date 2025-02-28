@@ -1,0 +1,813 @@
+{
+  "compatibilityLevel": 1550,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"SocialMedia (1)\",\"Errors in SocialMedia (1)\"]"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.139.1733.0 (24.12)+af51d793b3eacaf90fc70909aa713164bbd22a66"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "Errors in SocialMedia (1)",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "Source = #\"SocialMedia (1)\",",
+          "  #\"Detected Type Mismatches\" = let",
+          "    tableWithOnlyPrimitiveTypes = Table.SelectColumns(Source, Table.ColumnsOfType(Source, {type nullable number, type nullable text, type nullable logical, type nullable date, type nullable datetime, type nullable datetimezone, type nullable time, type nullable duration})),",
+          "    recordTypeFields = Type.RecordFields(Type.TableRow(Value.Type(tableWithOnlyPrimitiveTypes))),",
+          "    fieldNames = Record.FieldNames(recordTypeFields),",
+          "    fieldTypes = List.Transform(Record.ToList(recordTypeFields), each [Type]),",
+          "    pairs = List.Transform(List.Positions(fieldNames), (i) => {fieldNames{i}, (v) => if v = null or Value.Is(v, fieldTypes{i}) then v else error [Message = \"The type of the value does not match the type of the column.\", Detail = v], fieldTypes{i}})",
+          "in",
+          "    Table.TransformColumns(Source, pairs),",
+          "  #\"Added Index\" = Table.AddIndexColumn(#\"Detected Type Mismatches\", \"Row Number\" ,1),",
+          "  #\"Kept Errors\" = Table.SelectRowsWithErrors(#\"Added Index\", {\"Tweet\", \"Date\", \"Time\", \"impressions\", \"engagements\", \"engagement rate\", \"retweets\", \"replies\", \"likes\", \"user profile clicks\", \"url clicks\", \"hashtag clicks\", \"detail expands\", \"media views\", \"media engagements\"}),",
+          "  #\"Reordered Columns\" = Table.ReorderColumns(#\"Kept Errors\", {\"Row Number\", \"Tweet\", \"Date\", \"Time\", \"impressions\", \"engagements\", \"engagement rate\", \"retweets\", \"replies\", \"likes\", \"user profile clicks\", \"url clicks\", \"hashtag clicks\", \"detail expands\", \"media views\", \"media engagements\"})",
+          "in",
+          "  #\"Reordered Columns\""
+        ],
+        "kind": "m",
+        "lineageTag": "8899ea70-653b-4683-a167-7e8ee66ea8fa",
+        "queryGroup": "Query Errors - 05-02-2025 17:49:38"
+      }
+    ],
+    "queryGroups": [
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "0"
+          }
+        ],
+        "description": "Errors in queries that were loaded on 05-02-2025 17:49:38.",
+        "folder": "Query Errors - 05-02-2025 17:49:38"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "d574b0e6-3271-496a-b8d5-a710e89cd5c5",
+        "fromColumn": "Date",
+        "fromTable": "SocialMedia (1)",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_fb14b6fe-fa27-4863-b0dc-d14c03153b9d"
+      }
+    ],
+    "sourceQueryCulture": "en-IN",
+    "tables": [
+      {
+        "name": "SocialMedia (1)",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Tweet",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "bab6e264-10c1-44e1-a0cf-3939bf21ad8f",
+            "sourceColumn": "Tweet",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "f4189412-d9e3-4cae-92bd-ed33434aca05",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_fb14b6fe-fa27-4863-b0dc-d14c03153b9d"
+                },
+                "isDefault": true,
+                "relationship": "d574b0e6-3271-496a-b8d5-a710e89cd5c5"
+              }
+            ]
+          },
+          {
+            "name": "Time",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Time"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Time",
+            "lineageTag": "6ab2657f-ef47-4077-9a88-4a402dbe80f7",
+            "sourceColumn": "Time",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "impressions",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "5f58b6f7-f355-42bc-abb0-85a1a67e4ac0",
+            "sourceColumn": "impressions",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "engagements",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "6ee553b0-7fa8-404b-b82a-4fbce438062a",
+            "sourceColumn": "engagements",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "engagement rate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "5009f1b2-25ec-4f9a-92ee-9e031eb709b1",
+            "sourceColumn": "engagement rate",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "retweets",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "cbc64b4b-0648-4487-b086-af0b8d0b30b8",
+            "sourceColumn": "retweets",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "replies",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "f20b63e6-588c-434d-9080-0321e0415509",
+            "sourceColumn": "replies",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "likes",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "619051ee-8d30-428e-a132-edb3057038a9",
+            "sourceColumn": "likes",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "user profile clicks",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "733335f0-1bca-4b45-bcb0-7a77b47a2a65",
+            "sourceColumn": "user profile clicks",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "url clicks",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "ddf45d3e-13a8-4616-81b1-df4d434230b7",
+            "sourceColumn": "url clicks",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "hashtag clicks",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "df3fd9fe-081a-41b6-8f21-b96541a2fc66",
+            "sourceColumn": "hashtag clicks",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "detail expands",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "84c09393-c2a4-478a-a243-2895fb5163c8",
+            "sourceColumn": "detail expands",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "media views",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "5ec5f0bb-3044-454b-b5ba-54d3576b0a5c",
+            "sourceColumn": "media views",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "media engagements",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "8c394a7a-5443-41f2-afe4-23892d1c7273",
+            "sourceColumn": "media engagements",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "7b22d4ef-d1a0-42e8-9bcd-c4ce239d17ab",
+        "measures": [
+          {
+            "name": "ShowGraph",
+            "expression": [
+              "",
+              "VAR CurrentHour = HOUR(NOW())",
+              "RETURN",
+              "IF(CurrentHour >= 15 && CurrentHour <= 17, 1, 0)",
+              ""
+            ],
+            "formatString": "0",
+            "lineageTag": "9495c273-5086-4d2c-a99b-07de6576f7da"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "SocialMedia (1)",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\513ws\\Downloads\\Tweet.xlsx\"), null, true),",
+                "    #\"SocialMedia (1)_Sheet\" = Source{[Item=\"SocialMedia (1)\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(#\"SocialMedia (1)_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"Tweet\", type text}, {\"id\", Int64.Type}, {\"time\", type any}, {\"impressions\", type number}, {\"engagements\", Int64.Type}, {\"engagement rate\", type number}, {\"retweets\", Int64.Type}, {\"replies\", Int64.Type}, {\"likes\", Int64.Type}, {\"user profile clicks\", Int64.Type}, {\"url clicks\", Int64.Type}, {\"hashtag clicks\", Int64.Type}, {\"detail expands\", Int64.Type}, {\"permalink clicks\", Int64.Type}, {\"app opens\", Int64.Type}, {\"app installs\", Int64.Type}, {\"follows\", Int64.Type}, {\"email tweet\", Int64.Type}, {\"dial phone\", Int64.Type}, {\"media views\", Int64.Type}, {\"media engagements\", Int64.Type}}),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Changed Type\",{\"id\", \"permalink clicks\", \"app opens\", \"app installs\", \"follows\", \"email tweet\", \"dial phone\"}),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Removed Columns\",{{\"time\", type datetime}}),",
+                "    #\"Split Column by Position\" = Table.SplitColumn(Table.TransformColumnTypes(#\"Changed Type1\", {{\"time\", type text}}, \"en-IN\"), \"time\", Splitter.SplitTextByRepeatedLengths(10), {\"time.1\", \"time.2\"}),",
+                "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Split Column by Position\",{{\"time.1\", type date}, {\"time.2\", type time}}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Changed Type2\",{{\"time.1\", \"Date\"}, {\"time.2\", \"Time\"}}),",
+                "    #\"Added Custom\" = Table.AddColumn(#\"Renamed Columns\", \"Likes2\", each [likes]<0),",
+                "    #\"Sorted Rows\" = Table.Sort(#\"Added Custom\",{{\"Likes2\", Order.Ascending}}),",
+                "    #\"Added Custom1\" = Table.AddColumn(#\"Sorted Rows\", \"Impressions2\", each [impressions]<100),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Added Custom1\",{\"Impressions2\", \"Likes2\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns1\", each [media views] <> null and [media views] <> \"\"),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Filtered Rows\", each ([media engagements] <> null and [media engagements] <> \"\")),",
+                "    #\"Added Custom2\" = Table.AddColumn(#\"Filtered Rows1\", \"FilteredImpressions\", each Table.AddColumn(#\"Filtered Rows1\", \"FilteredImpressions\", each if [Impression] < 100 then [Impression] else null)),",
+                "    FilteredImpressions = #\"Added Custom2\"{14}[FilteredImpressions],",
+                "    #\"Removed Columns2\" = Table.RemoveColumns(FilteredImpressions,{\"FilteredImpressions\"})",
+                "in",
+                "    #\"Removed Columns2\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_1605fd61-b7f7-4401-8eaf-490d39de1064",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "0aa74a94-33ad-4b66-8acf-48aabc129c59",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "36f7548a-d476-42ea-9ad4-91792dfe27d5",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "48325a7e-e91b-40d6-97b7-70924054b0b5",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "57c7385a-f57b-45b4-95bb-7ea430901dcb",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "f6a87f91-9b26-4e2d-a996-cdd963e377b3",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "2581f1b8-dcfa-4370-921b-bdfbb2ec3ea4",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b32a592c-e589-4386-8509-86f16b97307a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "5baed123-555a-4924-86d5-0e8a625af1d0",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "a71138c2-9b9b-4e24-a52a-f5964489f1c5",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "4a4580c7-be93-4397-ad05-003b66bd6aa2",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "df90392f-d902-450a-a8ab-5ff7be179c61",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "dd341f5a-e405-4d53-b976-47829dc3d1a1"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "408fd48e-cde4-4e68-babf-f65e128e47d7",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_1605fd61-b7f7-4401-8eaf-490d39de1064",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocalDateTable_fb14b6fe-fa27-4863-b0dc-d14c03153b9d",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "a98c346d-1c4e-425d-8c1b-19d54a94d7df",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "c01f5812-5667-438b-bbfd-c8a2c692edd7",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "3531b89d-213b-45d3-9195-39906328aebb",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "eb6e9c4f-3506-4d98-8e75-4c7077cf6dd9",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "fd25b3fd-65fc-48a5-893b-ce077580ec2c",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "811c4d91-2afa-4699-a77a-2b805d3755d9",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "cb362f4f-0f9a-4001-8f96-41ae8cd6be27",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "0cfa08fb-32af-41f1-926e-cd39ff46d6c9",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "348bf258-a2ce-42e9-969a-561fa7c17188",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "3a6fc176-fa7f-4a58-aeae-54409952a8af",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "8608578e-919e-429e-8d89-85cc2e61304b",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "d05da17d-26aa-4783-be8f-1032719d09b1"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "526559ac-686b-4b6a-a5fa-a8d6cba5f060",
+        "partitions": [
+          {
+            "name": "LocalDateTable_fb14b6fe-fa27-4863-b0dc-d14c03153b9d",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('SocialMedia (1)'[Date])), 1, 1), Date(Year(MAX('SocialMedia (1)'[Date])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      }
+    ]
+  }
+}
